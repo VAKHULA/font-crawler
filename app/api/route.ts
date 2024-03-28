@@ -1,10 +1,14 @@
-const puppeteer = require('puppeteer');
+const playwright = require("playwright")
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
-  const url = searchParams.get('url')
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  const url = searchParams.get('url') as string
+
+  const browser = await playwright['chromium'].launch({
+    headless: true,
+  })
+  const context = await browser.newContext()
+  const page = await context.newPage()
 
   await page.goto(url);
 
